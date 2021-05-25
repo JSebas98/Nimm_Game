@@ -70,7 +70,7 @@ def identificar_jugadores(modo_juego):
 
         return jug1, jug2
     else:
-        jug1 = input("Jugador, ingrese tu nombre: ")
+        jug1 = input("Jugador, ingresa tu nombre: ")
         
         return jug1
 
@@ -116,7 +116,7 @@ def juego_PvP(jug1, jug2):
         return jug1
 
 def juego_PvC(jug1):
-    """Ejecuta el modo de juego jugador vs copmutador."""
+    """Ejecuta el modo de juego jugador vs computador."""
     pila_piedras = 20
     while pila_piedras > 0:
         # Turno del jugador 1
@@ -132,7 +132,7 @@ def juego_PvC(jug1):
             piedras_tomadas = int(input(f"{jug1}, ingresa 1 o 2: "))
         pila_piedras -= piedras_tomadas
         # Si el jugador 1 es el último en tomar una piedra, el ciclo se interrumpe
-        # para evitar que se pida al jugador 2 tomar piedras.
+        # para evitar que el computador tome piedras.
         if pila_piedras == 0:
             break
 
