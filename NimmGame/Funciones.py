@@ -30,79 +30,113 @@ def identificar_jugadores(modo_juego):
     """
     if modo_juego.lower() == 'p':
         jug1 = input("Jugador 1, ingresa tu nombre: ")
+        while len(jug1) == 0:
+            jug1 = input("Jugador 1, ingresa un nombre válido: ") 
         jug2 = input("Jugador 2, ingresa tu nombre: ")
+        while len(jug2) == 0:
+            jug2 = input("Jugador 2, ingresa un nombre válido: ")
 
         return jug1, jug2
     else:
         jug1 = input("Jugador, ingresa tu nombre: ")
+        while len(jug1) == 0:
+            jug1 = input("Jugador 1, ingresa un nombre válido: ")
         
         return jug1
 
 def juego_PvP(jug1, jug2):
     """Ejecuta el modo de juego jugador vs jugador."""
     pila_piedras = 20
-    while pila_piedras > 0:
+    activo = True
+    while activo:
         # Turno del jugador 1
         print(f"\nHay {pila_piedras} piedras disponibles.")
         turno = jug1
-        piedras_tomadas = int(input(f"\n{jug1}, ¿quieres tomar 1 o 2 piedras? "))
+        while turno == jug1:
+            try:
+                piedras_tomadas = int(input(f"\n{jug1}, ¿quieres tomar 1 o 2 piedras? "))
+                # Se asegura de que el input sea válido
+                if piedras_tomadas < 1 or piedras_tomadas > 2:
+                    print("Valor no válido. Sólo puedes tomar 1 o 2 piedras.")
+                    raise ValueError
+                # Limita la cantidad de piedras tomadas cuando sólo queda una.
+                elif pila_piedras == 1 and piedras_tomadas == 2:
+                    print(f"Lo siento, {jug1}. Sólo hay 1 piedra disponible.")
+                    raise ValueError
+                else:
+                    turno = jug2
+                    pila_piedras -= piedras_tomadas
+                # Si el jugador 1 es el último en tomar una piedra, el ciclo se interrumpe
+                # para evitar que se pida al jugador 2 tomar piedras.
+                    if pila_piedras == 0:
+                        activo = False
+                
+            except ValueError:
+                continue
         
-        # Limita la cantidad de piedras tomadas cuando sólo queda una.
-        while pila_piedras == 1 and piedras_tomadas == 2:
-            piedras_tomadas = int(input(f"Lo siento, {jug1}. Sólo hay 1 piedra disponible. "))
-
-        while piedras_tomadas < 1 or piedras_tomadas > 2:
-            piedras_tomadas = int(input(f"{jug1}, ingresa 1 o 2: "))
-        pila_piedras -= piedras_tomadas
-        # Si el jugador 1 es el último en tomar una piedra, el ciclo se interrumpe
-        # para evitar que se pida al jugador 2 tomar piedras.
-        if pila_piedras == 0:
-            break
-
-        # Turno del jugador 2
         print(f"\nHay {pila_piedras} piedras disponibles.")
-        turno = jug2
-        piedras_tomadas = int(input(f"\n{jug2}, ¿quieres tomar 1 o 2 piedras? "))
-
-        # Limita la cantidad de piedras tomadas cuando sólo queda una.
-        while pila_piedras == 1 and piedras_tomadas == 2:
-            piedras_tomadas = int(input(f"Lo siento, {jug2}. Sólo hay 1 piedra disponible. "))
-
-        while piedras_tomadas < 1 or piedras_tomadas > 2:
-            piedras_tomadas = int(input(f"{jug2}, ingresa 1 o 2: "))
-        pila_piedras -= piedras_tomadas
+        # Turno del jugador 2
+        while turno == jug2 and activo == True:
+            try:
+                piedras_tomadas = int(input(f"\n{jug2}, ¿quieres tomar 1 o 2 piedras? "))
+                # Se asegura de que el input sea válido
+                if piedras_tomadas < 1 or piedras_tomadas > 2:
+                    print("Valor no válido. Sólo puedes tomar 1 o 2 piedras.")
+                    raise ValueError
+                # Limita la cantidad de piedras tomadas cuando sólo queda una.
+                elif pila_piedras == 1 and piedras_tomadas == 2:
+                    print(f"Lo siento, {jug2}. Sólo hay 1 piedra disponible.")
+                    raise ValueError
+                else:
+                    turno = jug1
+                    pila_piedras -= piedras_tomadas
+                    # Si el jugador 2 es el último en tomar una piedra, el ciclo se interrumpe
+                    # y termina el programa.
+                    if pila_piedras == 0:
+                        activo = False
+            except ValueError:
+                continue
     
     # Determina el ganador dependiendo del valor en turno.
     # Devuelve el nombre del ganador.
     if turno == jug1:
-        return jug2
-    else:
         return jug1
+    else:
+        return jug2
 
 def juego_PvC(jug1):
     """Ejecuta el modo de juego jugador vs computador."""
     pila_piedras = 20
-    while pila_piedras > 0:
+    activo = True
+    while activo:
         # Turno del jugador 1
         print(f"\nHay {pila_piedras} piedras disponibles.")
         turno = jug1
-        piedras_tomadas = int(input(f"\n{jug1}, ¿quieres tomar 1 o 2 piedras? "))
-        
-        # Limita la cantidad de piedras tomadas cuando sólo queda una.
-        while pila_piedras == 1 and piedras_tomadas == 2:
-            piedras_tomadas = int(input(f"Lo siento, {jug1}. Sólo hay 1 piedra disponible. "))
-
-        while piedras_tomadas < 1 or piedras_tomadas > 2:
-            piedras_tomadas = int(input(f"{jug1}, ingresa 1 o 2: "))
-        pila_piedras -= piedras_tomadas
-        # Si el jugador 1 es el último en tomar una piedra, el ciclo se interrumpe
-        # para evitar que el computador tome piedras.
-        if pila_piedras == 0:
-            break
+        while turno == jug1:
+            try:
+                piedras_tomadas = int(input(f"\n{jug1}, ¿quieres tomar 1 o 2 piedras? "))
+                # Se asegura de que el input sea válido
+                if piedras_tomadas < 1 or piedras_tomadas > 2:
+                    print("Valor no válido. Sólo puedes tomar 1 o 2 piedras.")
+                    raise ValueError
+                # Limita la cantidad de piedras tomadas cuando sólo queda una.
+                elif pila_piedras == 1 and piedras_tomadas == 2:
+                    print(f"Lo siento, {jug1}. Sólo hay 1 piedra disponible.")
+                    raise ValueError
+                else:
+                    turno = 'computador'
+                    pila_piedras -= piedras_tomadas
+                # Si el jugador 1 es el último en tomar una piedra, el ciclo se interrumpe
+                # para evitar que se pida al jugador 2 tomar piedras.
+                    if pila_piedras == 0:
+                        activo = False
+            except ValueError:
+                continue
 
         # Turno del computador
         print(f"\nHay {pila_piedras} piedras disponibles.")
-        turno = 'computador'
+        if activo == False:
+            break
         # Toma un número aleatorio de piedras entre 1 y 2.
         piedras_tomadas = random.randint(1, 2)
         
@@ -115,13 +149,15 @@ def juego_PvC(jug1):
         # Si sólo queda una piedra, se limita la elección del computador a una sola piedra.
         if pila_piedras == 1:
             piedras_tomadas = 1
+            activo = False
         
         print(f"\nComputador ha tomado {piedras_tomadas} piedras.")
         pila_piedras -= piedras_tomadas
+        turno = jug1
     
     # Determina el ganador dependiendo del valor en turno.
     # Devuelve el nombre del ganador.
-    if turno == jug1:
+    if turno == 'computador':
         return 'computador'
     else:
         return jug1
